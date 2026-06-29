@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import org.mozilla.javascript.Context
+import org.mozilla.javascript.Context as RhinoContext
 import org.mozilla.javascript.Scriptable
 
 class CalculatorViewModel: ViewModel() {
@@ -51,7 +51,7 @@ class CalculatorViewModel: ViewModel() {
 
 
     fun calculateResult(equation: String): String {
-        val context: Context = Context.enter()
+        val context: RhinoContext = RhinoContext.enter()
         context.optimizationLevel = -1
         val scriptable: Scriptable = context.initStandardObjects()
 
@@ -91,7 +91,7 @@ class CalculatorViewModel: ViewModel() {
         val finalResult = try {
             val number = rawResult.toDouble()
             "%.10f".format(number).trimEnd('0').trimEnd('.')
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             rawResult
         }
 

@@ -102,7 +102,7 @@ fun CalculatorButton(btn: String, onClick: () -> Unit, isWide: Boolean = false) 
         FloatingActionButton(
             onClick = onClick,
             modifier = if (isWide) {
-                Modifier.fillMaxWidth().height(80.dp)
+                Modifier.fillMaxWidth().height(60.dp)
             } else {
                 Modifier.size(80.dp)
             },
@@ -110,7 +110,7 @@ fun CalculatorButton(btn: String, onClick: () -> Unit, isWide: Boolean = false) 
             contentColor = Color.White,
             containerColor = getColor(btn)
         ) {
-            Text(text = btn, fontSize = 22.sp, fontWeight = FontWeight.Bold)
+            Text(text = btn, fontSize = 21.sp, fontWeight = FontWeight.Bold)
         }
     }
 }

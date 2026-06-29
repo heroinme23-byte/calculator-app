@@ -16,7 +16,7 @@ class CalculatorViewModel: ViewModel() {
     fun onButtonClick(btn: String) {
         Log.i("Clicked Button", btn)
 
-        _equationText.value?. let{
+        _equationText.value?.let {
             if (btn == "AC") {
                 _equationText.value = ""
                 _resultText.value = "0"
@@ -32,17 +32,19 @@ class CalculatorViewModel: ViewModel() {
                 _equationText.value = _resultText.value
                 return
             }
-            _equationText.value = it+btn
 
-            // CALCULATE RESULT
+            val textToAppend = if (btn == "sin" || btn == "cos" || btn == "tan" || btn == "nPr" || btn == "nCr") {
+                "$btn("
+            } else {
+                btn
+            }
+
+            _equationText.value = it + textToAppend
+
             try {
                 _resultText.value = calculateResult(_equationText.value.toString())
-            } catch (_ : Exception){}
-
-
+            } catch (_: Exception) {}
         }
-
-
     }
 
 
@@ -54,10 +56,28 @@ class CalculatorViewModel: ViewModel() {
         val scriptable: Scriptable = context.initStandardObjects()
 
         val setup = """
-        function sin(deg) { return Math.sin(deg * Math.PI / 180); }
-        function cos(deg) { return Math.cos(deg * Math.PI / 180); }
-        function tan(deg) { return Math.tan(deg * Math.PI / 180); }
-    """.trimIndent()
+            function sin(deg) { return Math.sin(deg * Math.PI / 180); }
+            function cos(deg) { return Math.cos(deg * Math.PI / 180); }
+            function tan(deg) { return Math.tan(deg * Math.PI / 180); }
+            
+            function factorial(n) {
+                if (n < 0) return NaN;
+                if (n <= 1) return 1;
+                var result = 1;
+                for (var i = 2; i <= n; i++) {
+                    result *= i;
+                }
+                return result;
+            }
+            
+            function nPr(n, r) {
+                return factorial(n) / factorial(n - r);
+            }
+            
+            function nCr(n, r) {
+                return factorial(n) / (factorial(r) * factorial(n - r));
+            }
+        """.trimIndent()
 
         context.evaluateString(scriptable, setup, "Setup", 1, null)
 
